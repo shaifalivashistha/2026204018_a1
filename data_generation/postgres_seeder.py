@@ -15,7 +15,6 @@ def seed():
     conn = psycopg2.connect(**CONN_PARAMS)
     cur = conn.cursor()
     
-    # Clear existing test data and reset primary key counters
     print("Clearing old data...")
     cur.execute("TRUNCATE TABLE appointments, wallet_audit_logs, patients, clinics RESTART IDENTITY CASCADE;")
     conn.commit()
