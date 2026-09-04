@@ -7,7 +7,7 @@ Project 4 for CS6.302 Assignment 1. The repository contains a reproducible Postg
 > **Required before submission:** replace both placeholders after pushing the final version.
 
 - GitHub repository URL: https://github.com/shaifalivashistha/2026204018_a1.git
-- Final commit hash: 
+- Final commit hash: 1e72de981fb9ac101cd4b9d73b5b3542b55420b1
 
 ## Assumptions
 
