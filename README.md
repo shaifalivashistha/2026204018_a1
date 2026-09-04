@@ -7,7 +7,7 @@ Project 4 for CS6.302 Assignment 1. The repository contains a reproducible Postg
 > **Required before submission:** replace both placeholders after pushing the final version.
 
 - GitHub repository URL: https://github.com/shaifalivashistha/2026204018_a1.git
-- Final commit hash: 063b48725a19dbe2a7037a9a98471017deb9186c
+- Final commit hash: 65254eb4d690f9fe89c947f9360a71b4510578d8
 
 ## Assumptions
 
@@ -125,3 +125,12 @@ totalDocsExamined: 5000
 ```
 
 Tested with PostgreSQL 18.6, MongoDB 7.0.40, and Python 3.14.4.
+
+
+### AI Tool Usage Disclosure
+In the completion of this lab activity, generative AI was utilized as a learning assistant and pair-programming tool for the following tasks:
+*   Understanding and breaking down the problem statements and grading rubric.
+*   Reviewing and refining the code for accuracy, edge-case handling, and best practices.
+*   Explaining specific parts of the code that I failed to fully understand after refinement
+*   Optimizing the code for performance across the large dataset.
+*   Creating and formatting this `readme.md` file based on the finalized coding process.
