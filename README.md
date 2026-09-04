@@ -104,7 +104,6 @@ Index Only Scan using idx_appointments_discharged_analytics on appointments
   Index Searches: 1
 Execution Time: 24.751 ms
 ```
-
 MongoDB Workflow 3 (`explain("executionStats")` on 500,000 nurse pings):
 
 ```text
