@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Inter, Arial, sans-serif" role="img" aria-label="CareConnect wireframe - Clinic analytics">
+<title>CareConnect wireframe - Clinic analytics</title>
+<rect width="1600" height="1000" fill="#f7f7f7"/>
+<rect x="20" y="20" width="1180" height="960" rx="12" fill="#ffffff" stroke="#7a7a7a" stroke-width="2"/>
+<path d="M48 62c0-10 12-14 18-6 6-8 18-4 18 6 0 10-18 20-18 20s-18-10-18-20z" fill="#117C76"/>
+<text x="96" y="74" font-size="22" font-weight="bold" fill="#2b2b2b" text-anchor="start">CareConnect</text>
+<text x="640" y="52" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">Acting as (demo)</text>
+<rect x="640" y="58" width="250" height="34" rx="6" fill="#ffffff" stroke="#9a9a9a" stroke-width="1.5"/>
+<text x="650" y="80" font-size="13" font-weight="normal" fill="#2b2b2b" text-anchor="start">Patient: &lt;name&gt;  ▾</text>
+<text x="910" y="52" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">Selected clinic</text>
+<rect x="910" y="58" width="260" height="34" rx="6" fill="#ffffff" stroke="#9a9a9a" stroke-width="1.5"/>
+<text x="920" y="80" font-size="13" font-weight="normal" fill="#2b2b2b" text-anchor="start">&lt;clinic name&gt; (id)  ▾</text>
+<line x1="20" y1="112" x2="1200" y2="112" stroke="#9a9a9a" stroke-width="1.5"/>
+<text x="44" y="146" font-size="14" font-weight="normal" fill="#6b6b6b" text-anchor="start">Browse</text>
+<text x="140" y="146" font-size="14" font-weight="normal" fill="#6b6b6b" text-anchor="start">Transaction</text>
+<text x="276" y="146" font-size="14" font-weight="normal" fill="#6b6b6b" text-anchor="start">Audit trail</text>
+<text x="412" y="146" font-size="14" font-weight="bold" fill="#117C76" text-anchor="start">Analytics</text>
+<line x1="406" y1="164" x2="498" y2="164" stroke="#117C76" stroke-width="3"/>
+<text x="532" y="146" font-size="14" font-weight="normal" fill="#6b6b6b" text-anchor="start">Map</text>
+<text x="604" y="146" font-size="14" font-weight="normal" fill="#6b6b6b" text-anchor="start">Reviews</text>
+<line x1="20" y1="166" x2="1200" y2="166" stroke="#9a9a9a" stroke-width="1.5"/>
+<text x="44" y="214" font-size="28" font-weight="bold" fill="#2b2b2b" text-anchor="start">Clinic analytics</text>
+<text x="44" y="240" font-size="14" font-weight="normal" fill="#6b6b6b" text-anchor="start">&lt;clinic&gt; · discharged appointments only</text>
+<text x="44" y="966" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">Footer: Amounts use HSA account units. Dates and times are shown in UTC.</text>
+<text x="1240" y="60" font-size="20" font-weight="bold" fill="#2b2b2b" text-anchor="start">Clinic analytics</text>
+<text x="1240" y="84" font-size="13" font-weight="normal" fill="#6b6b6b" text-anchor="start">Interactions and states</text>
+<line x1="1240" y1="98" x2="1570" y2="98" stroke="#9a9a9a" stroke-width="1.5"/>
+<text x="1000" y="190" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">Month (UTC)</text>
+<rect x="1000" y="196" width="176" height="34" rx="6" fill="#ffffff" stroke="#9a9a9a" stroke-width="1.5"/>
+<text x="1010" y="218" font-size="13" font-weight="normal" fill="#2b2b2b" text-anchor="start">October 2026</text>
+<rect x="44" y="262" width="1132" height="40" rx="8" fill="#eef6fb" stroke="#b9d6e6" stroke-width="1.5"/>
+<text x="64" y="287" font-size="12" font-weight="normal" fill="#3b6a85" text-anchor="start">ⓘ Shown only on older data: &quot;The most recent discharged revenue is on &lt;date&gt;…&quot;</text>
+<rect x="44" y="318" width="366" height="130" rx="8" fill="#ffffff" stroke="#9a9a9a" stroke-width="1.5"/>
+<text x="64" y="350" font-size="13" font-weight="bold" fill="#6b6b6b" text-anchor="start">Monthly discharges</text>
+<text x="64" y="392" font-size="30" font-weight="bold" fill="#2b2b2b" text-anchor="start">259</text>
+<rect x="426" y="318" width="366" height="130" rx="8" fill="#ffffff" stroke="#9a9a9a" stroke-width="1.5"/>
+<text x="446" y="350" font-size="13" font-weight="bold" fill="#6b6b6b" text-anchor="start">Selected-period copay revenue</text>
+<text x="446" y="392" font-size="30" font-weight="bold" fill="#2b2b2b" text-anchor="start">39,493.54</text>
+<rect x="808" y="318" width="366" height="130" rx="8" fill="#ececec" stroke="#9a9a9a" stroke-width="1.5"/>
+<text x="828" y="350" font-size="13" font-weight="bold" fill="#6b6b6b" text-anchor="start">Last refreshed (UTC)</text>
+<text x="828" y="392" font-size="24" font-weight="bold" fill="#2b2b2b" text-anchor="start">15 Oct 2026, 15:05</text>
+<rect x="808" y="406" width="170" height="36" rx="8" fill="#117C76" stroke="#117C76" stroke-width="1.5"/>
+<text x="893.0" y="429" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">⟳ Refresh summary</text>
+<rect x="44" y="466" width="700" height="400" rx="8" fill="#ffffff" stroke="#9a9a9a" stroke-width="1.5"/>
+<text x="68" y="500" font-size="18" font-weight="bold" fill="#2b2b2b" text-anchor="start">7-day moving average revenue</text>
+<text x="68" y="518" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">From (UTC)</text>
+<rect x="68" y="524" width="150" height="34" rx="6" fill="#ffffff" stroke="#9a9a9a" stroke-width="1.5"/>
+<text x="230" y="518" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">To (UTC)</text>
+<rect x="230" y="524" width="150" height="34" rx="6" fill="#ffffff" stroke="#9a9a9a" stroke-width="1.5"/>
+<line x1="80" y1="820" x2="720" y2="820" stroke="#9a9a9a" stroke-width="1.5"/>
+<polyline points="90,780 150,740 210,760 270,700 330,720 390,690 450,730 510,680 570,700 640,660 700,690" fill="none" stroke="#117C76" stroke-width="3"/>
+<text x="68" y="850" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">▸ Exact chart values (table)</text>
+<rect x="764" y="466" width="412" height="400" rx="8" fill="#ffffff" stroke="#9a9a9a" stroke-width="1.5"/>
+<text x="788" y="500" font-size="18" font-weight="bold" fill="#2b2b2b" text-anchor="start">Clinic ranking</text>
+<text x="788" y="518" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">Ranking date (UTC)</text>
+<rect x="788" y="524" width="160" height="34" rx="6" fill="#ffffff" stroke="#9a9a9a" stroke-width="1.5"/>
+<rect x="788" y="580" width="364" height="34" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<text x="800.0" y="602" font-size="12" font-weight="bold" fill="#6b6b6b" text-anchor="start">Rank</text>
+<text x="921.3333333333334" y="602" font-size="12" font-weight="bold" fill="#6b6b6b" text-anchor="start">Clinic</text>
+<text x="1042.6666666666667" y="602" font-size="12" font-weight="bold" fill="#6b6b6b" text-anchor="start">7-day avg</text>
+<line x1="788" y1="648" x2="1152" y2="648" stroke="#d6d6d6" stroke-width="1"/>
+<rect x="800.0" y="626" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<rect x="921.3333333333334" y="626" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<rect x="1042.6666666666667" y="626" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<line x1="788" y1="682" x2="1152" y2="682" stroke="#d6d6d6" stroke-width="1"/>
+<rect x="800.0" y="660" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<rect x="921.3333333333334" y="660" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<rect x="1042.6666666666667" y="660" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<line x1="788" y1="716" x2="1152" y2="716" stroke="#d6d6d6" stroke-width="1"/>
+<rect x="800.0" y="694" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<rect x="921.3333333333334" y="694" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<rect x="1042.6666666666667" y="694" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<line x1="788" y1="750" x2="1152" y2="750" stroke="#d6d6d6" stroke-width="1"/>
+<rect x="800.0" y="728" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<rect x="921.3333333333334" y="728" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<rect x="1042.6666666666667" y="728" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<line x1="788" y1="784" x2="1152" y2="784" stroke="#d6d6d6" stroke-width="1"/>
+<rect x="800.0" y="762" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<rect x="921.3333333333334" y="762" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<rect x="1042.6666666666667" y="762" width="66.73333333333333" height="9" rx="4" fill="#ececec" stroke="none" stroke-width="1.5"/>
+<rect x="980" y="820" width="80" height="36" rx="8" fill="#ffffff" stroke="#117C76" stroke-width="1.5"/>
+<text x="1020.0" y="843" font-size="13" font-weight="bold" fill="#117C76" text-anchor="middle">Previous</text>
+<rect x="1072" y="820" width="80" height="36" rx="8" fill="#ffffff" stroke="#117C76" stroke-width="1.5"/>
+<text x="1112.0" y="843" font-size="13" font-weight="bold" fill="#117C76" text-anchor="middle">Next</text>
+<circle cx="1166" cy="214" r="11" fill="#117C76" opacity="0.9"/>
+<text x="1166" y="218" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+<circle cx="1166" cy="282" r="11" fill="#117C76" opacity="0.9"/>
+<text x="1166" y="286" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">2</text>
+<circle cx="988" cy="424" r="11" fill="#117C76" opacity="0.9"/>
+<text x="988" y="428" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">3</text>
+<circle cx="734" cy="540" r="11" fill="#117C76" opacity="0.9"/>
+<text x="734" y="544" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">4</text>
+<circle cx="1166" cy="540" r="11" fill="#117C76" opacity="0.9"/>
+<text x="1166" y="544" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">5</text>
+<circle cx="1252" cy="132" r="12" fill="#117C76"/>
+<text x="1252" y="137" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+<text x="1274" y="137" font-size="14" font-weight="bold" fill="#2b2b2b" text-anchor="start">Month picker</text>
+<text x="1274" y="158" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">Monthly discharges come from the materialized</text>
+<text x="1274" y="176" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">view mv_clinic_monthly_discharges.</text>
+<circle cx="1252" cy="208" r="12" fill="#117C76"/>
+<text x="1252" y="213" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">2</text>
+<text x="1274" y="213" font-size="14" font-weight="bold" fill="#2b2b2b" text-anchor="start">Opens on the latest data</text>
+<text x="1274" y="234" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">Chart, ranking and month start at the latest</text>
+<text x="1274" y="252" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">recorded revenue (today on fresh data).</text>
+<circle cx="1252" cy="284" r="12" fill="#117C76"/>
+<text x="1252" y="289" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">3</text>
+<text x="1274" y="289" font-size="14" font-weight="bold" fill="#2b2b2b" text-anchor="start">Refresh (clinic staff)</text>
+<text x="1274" y="310" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">REFRESH MATERIALIZED VIEW CONCURRENTLY;</text>
+<text x="1274" y="328" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">patients see why the button is disabled.</text>
+<circle cx="1252" cy="360" r="12" fill="#117C76"/>
+<text x="1252" y="365" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">4</text>
+<text x="1274" y="365" font-size="14" font-weight="bold" fill="#2b2b2b" text-anchor="start">Workflow 2 chart</text>
+<text x="1274" y="386" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">RANGE 6 days PRECEDING window per clinic;</text>
+<text x="1274" y="404" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">any historical dates up to today.</text>
+<circle cx="1252" cy="436" r="12" fill="#117C76"/>
+<text x="1252" y="441" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">5</text>
+<text x="1274" y="441" font-size="14" font-weight="bold" fill="#2b2b2b" text-anchor="start">DENSE_RANK ranking</text>
+<text x="1274" y="462" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">All clinics for one date; equal averages share</text>
+<text x="1274" y="480" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">a rank. Empty date → explained empty state.</text>
+</svg>

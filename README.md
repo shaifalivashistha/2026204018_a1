@@ -1,88 +1,268 @@
-# CareConnect - On-Demand Telemedicine Database System
+# CareConnect – On-Demand Telemedicine (Assignment 2: Front End Design)
 
-Project 4 for CS6.302 Assignment 1. The repository contains a reproducible PostgreSQL and MongoDB implementation of the required database workflows.
+A six-screen web application built on the Assignment 1 CareConnect databases (Project 4).
+**PostgreSQL** owns patients, clinics, appointments, HSA payments, the audit ledger, status rules,
+the 7-day moving-average analytics and the monthly materialized view. **MongoDB** (`medical_db`)
+owns nurse telemetry (nearest active nurse within 5 km), patient-review facets and the flexible
+medical catalog. A **FastAPI** server (`api/`) sits between the **React** frontend (`web/`) and both
+databases; the browser never talks to a database directly.
 
-## Submission metadata
+| | |
+|---|---|
+| **Team repository** | `https://github.com/NirupamaRanjan/23_a1b` |
+| **Final commit hash** | `4de590ec8fb44797ef921d190112392140b51ae4` |
+| **Demo video (≤ 5 min)** | `https://drive.google.com/file/d/1NopyPzG4QD9tq_GTgbCpfWoYvimI6M6z/view?usp=sharing` |
 
-> **Required before submission:** replace both placeholders after pushing the final version.
+**Contents:** [Repository structure](#repository-structure) · [The six screens](#the-six-screens) ·
+[Screenshots](#screenshots) · [Setup](#setup) · [Demo walkthrough](#demo-walkthrough) ·
+[Assumptions](#assumptions) · [Tech choices](#tech-choices) · [Tests](#tests) ·
+[Contribution table](#contribution-table) · [Submission details](#submission-details) ·
+[Assignment 1 evidence](#assignment-1-evidence)
 
-- GitHub repository URL: https://github.com/shaifalivashistha/2026204018_a1.git
-- Final commit hash: 65254eb4d690f9fe89c947f9360a71b4510578d8
+## Repository structure
 
-## Assumptions
+```text
+<new_team_number>_a1b/
+├── README.md                 setup steps, assumptions, tech choices, screenshots,
+│                             contribution table, repo URL + final commit hash, demo link
+├── docs/
+│   ├── handover_note.md      inherited system, what worked/failed, changes and reasons
+│   ├── api_endpoints.md      every API endpoint with inputs, outputs and error codes
+│   ├── design/               wireframes (SVG) and user descriptions
+│   └── screenshots/          PNG screenshots of the six screens (shown below)
+├── sql/  mongo/  data_generation/     from Part A (+ our fixes)
+├── api/                      FastAPI server layer and integration tests
+├── web/                      React + Material UI + Leaflet frontend, unit and browser tests
+├── performance/              Part A EXPLAIN / executionStats evidence
+├── .env.example              settings template for a manual setup (copy to .env)
+├── .env.docker.example       settings template for Docker (copy to .env.docker)
+└── docker-compose.yml        optional one-command local stack
+```
 
-- PostgreSQL and MongoDB run locally on their default ports.
-- Appointment statuses use the PDF literals `WAITING`, `IN CONSULTATION`, and `DISCHARGED`.
-- Only `DISCHARGED` appointments count as realized copay revenue and monthly discharges.
-- Workflow 2 reports the most recent 30 days, which supplies enough history for each 7-day moving average while allowing the analytics index to bound the scan.
-- GeoJSON coordinates are ordered as `[longitude, latitude]`, and MongoDB distances are expressed in metres.
-- Nurse pings expire two hours after `created_at`; reseed shortly before a live demonstration because an older dataset will correctly become empty.
-- The PostgreSQL seeder truncates existing CareConnect relational data. The MongoDB seeder appends data unless the collections are cleared manually.
+## The six screens
 
-## Repository map
+| Screen | Workflow | What it does |
+|---|---|---|
+| **Browse** | – | Patients, clinics and appointments with server-side paging, search and filters, and an inline detail panel. Clinic staff move appointments WAITING → IN_CONSULTATION → DISCHARGED from the detail panel. |
+| **Transaction** | Workflow 1 | Books an appointment through `sp_execute_appointment`; shows the HSA balance before/after and the audit row written by the trigger. Friendly messages for insufficient balance, an already active visit and non-accepting clinics. **Patients only.** |
+| **Audit trail** | – | Read-only `wallet_audit_logs` for the session patient, newest first, with a date filter, opening balance and running balance. **Patients only.** |
+| **Analytics** | Workflow 2 + view | 7-day moving-average revenue chart (`RANGE` window), `DENSE_RANK()` clinic ranking, monthly discharges from the materialized view with "last refreshed" time and a refresh button for clinic staff. |
+| **Map** | Workflow 3 | `$geoNear` search for active nurses within a fixed 5 km of your location, typed coordinates, a map click or the selected clinic; results sorted by distance and refreshed every 10 s. |
+| **Reviews** | Workflow 4 | `$facet` rating distribution, top bedside-manner tags and overall average, plus the flexible `MedicalCatalogs` documents filtered by specialty. |
 
-- `docs/relational_erd.png`: PostgreSQL ERD matching the submitted DDL.
-- `docs/mongo_schema_map.json`: MongoDB document structures.
-- `sql/01_schema_ddl.sql`: tables, keys, status checks, and non-negative HSA constraint.
-- `sql/02_indexes.sql`: active-consultation partial unique index and Workflow 2 covering partial index.
-- `sql/03_triggers_and_audit.sql`: automatic HSA audit trigger.
-- `sql/04_stored_procedures.sql`: atomic appointment procedure.
-- `sql/05_materialized_views.sql`: monthly discharge view, unique index, and concurrent refresh function.
-- `sql/06_window_analytics.sql`: CTEs, 7-day moving average, and `DENSE_RANK()`.
-- `mongo/01_collections_and_indexes.js`: collection validators, 2dsphere, TTL, and review-rating indexes.
-- `mongo/02_workflow3_geonear.js`: nearest active nurse within 5 km.
-- `mongo/03_workflow4_facet.js`: rating distribution, frequent tags, and global average.
+Demo actors are switched from the header ("Acting as": a patient or a clinic's staff); there is no
+login screen. A clinic-staff actor's ID is the clinic's ID. Clinic staff see an access message
+instead of Transaction and Audit trail, and the API rejects their requests with `PATIENT_ONLY`.
 
-## Setup and execution
+## Screenshots
 
-Install the Python dependencies:
+Captured from the running application with seeded data (1440 px wide). Wireframes for the same
+screens are in [`docs/design/wireframes/`](docs/design/wireframes/).
+
+| | |
+|---|---|
+| **Browse** – clinic details open inline<br>![Browse](docs/screenshots/01_browse.png) | **Transaction** – booking result and trigger audit row<br>![Transaction](docs/screenshots/02_transaction.png) |
+| **Audit trail** – newest entry first<br>![Audit trail](docs/screenshots/03_audit_trail.png) | **Analytics** – moving average, ranking, monthly view<br>![Analytics](docs/screenshots/04_analytics.png) |
+| **Map** – nearest active nurses within 5 km<br>![Map](docs/screenshots/05_map.png) | **Reviews** – review facets and medical catalog<br>![Reviews](docs/screenshots/06_reviews.png) |
+
+## Setup
+
+Requirements: **Python 3.12+**, **Node 22.14+** (or 24+), **PostgreSQL 16+**, **MongoDB 7+**.
+Run every command from the repository root unless a step says otherwise. The commands are for
+macOS/Linux; Windows PowerShell equivalents are in [Windows notes](#windows-notes).
+
+### 1. Settings
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env`:
+
+```dotenv
+DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/careconnect
+PGUSER=postgres
+PGPASSWORD=YOUR_PASSWORD
+PGDATABASE=careconnect
+CARECONNECT_MONGO_URI=mongodb://localhost:27017/
+CARECONNECT_MONGO_DB=medical_db
+CARECONNECT_DEMO_MODE=true
+```
+
+- Any PostgreSQL database name works; URL-encode special characters (`@`, `#`, …) in the password inside `DATABASE_URL`.
+- The MongoDB database must be `medical_db`.
+- The API, seeders and helper scripts read the root `.env` themselves. For `psql`/`createdb`, load it
+  into the terminal: `set -a; source .env; set +a` (repeat in each new terminal). Never commit `.env`.
+
+### 2. Python environment
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r data_generation/requirements.txt
+pip install -r api/requirements.txt -r data_generation/requirements.txt
 ```
 
-Create and configure PostgreSQL. Set the password variable only if the server requires password authentication:
+### 3. Create the databases and seed the data
 
 ```bash
-export CARECONNECT_DB_NAME=careconnect
-export CARECONNECT_DB_USER=postgres
-export CARECONNECT_DB_PASSWORD='<your-local-postgres-password>'
-export PGPASSWORD="$CARECONNECT_DB_PASSWORD"
-createdb -h localhost -U postgres careconnect
-
-psql -h localhost -U postgres -d careconnect -v ON_ERROR_STOP=1 -f sql/01_schema_ddl.sql
-psql -h localhost -U postgres -d careconnect -v ON_ERROR_STOP=1 -f sql/02_indexes.sql
-psql -h localhost -U postgres -d careconnect -v ON_ERROR_STOP=1 -f sql/03_triggers_and_audit.sql
-psql -h localhost -U postgres -d careconnect -v ON_ERROR_STOP=1 -f sql/04_stored_procedures.sql
-psql -h localhost -U postgres -d careconnect -v ON_ERROR_STOP=1 -f sql/05_materialized_views.sql
-python3 data_generation/postgres_seeder.py
-psql -h localhost -U postgres -d careconnect -c 'SELECT refresh_clinic_monthly_discharges();'
-psql -h localhost -U postgres -d careconnect -f sql/06_window_analytics.sql
+createdb "$PGDATABASE"                  # skip if the database already exists
+python mongo/setup.py                   # MongoDB collections, validators and indexes
+python mongo/setup.py --check           # should end with "OK"
+python data_generation/bootstrap.py     # PostgreSQL schema + seed both databases
 ```
 
-Create, validate, and seed MongoDB, then run both workflows:
+`bootstrap.py` installs `sql/01`–`05` and `sql/07_api_support.sql` on an empty database, seeds
+**1,000 patients, 50 clinics, 50,000 appointments, 100,000 audit entries, 500 nurses, 500,000 nurse
+pings, 5,000 reviews and 40 catalog documents**, and refreshes the monthly view. It only seeds
+empty stores, so it is safe to run again (it never overwrites data).
+
+To **wipe and reseed** an existing database instead (PostgreSQL first, because nurses are placed
+around the clinic locations):
 
 ```bash
-export CARECONNECT_MONGO_URI='mongodb://localhost:27017/'
-export CARECONNECT_MONGO_DB=careconnect
-
-mongosh "$CARECONNECT_MONGO_URI" mongo/01_collections_and_indexes.js
-python3 data_generation/mongo_seeder.py
-mongosh "$CARECONNECT_MONGO_URI" mongo/02_workflow3_geonear.js
-mongosh "$CARECONNECT_MONGO_URI" mongo/03_workflow4_facet.js
+python data_generation/postgres_seeder.py              # replaces all PostgreSQL demo data
+psql -c 'SELECT refresh_clinic_monthly_discharges();'
+python data_generation/mongo_seeder.py --reset-data    # replaces all MongoDB demo data
 ```
 
-Example atomic appointment call:
+### 4. Start the backend (terminal 1)
 
-```sql
-CALL sp_execute_appointment(1, 1, 25.00);
+```bash
+source .venv/bin/activate
+cd api
+python main.py
 ```
 
-## Stress-test results
+The API runs on http://127.0.0.1:8000 (health: `/api/health`, interactive docs: `/api/docs`).
 
-The clean-install seeders were executed successfully in disposable databases on 3 September 2026:
+### 5. Start the frontend (terminal 2)
+
+```bash
+cd web
+npm ci            # first time, or after dependency changes
+npm run dev
+```
+
+Open **http://127.0.0.1:5173**. Vite forwards `/api` to the API, so cookies and CSRF checks stay on
+one origin (`CARECONNECT_API_PROXY` in `.env` changes the target).
+
+### 6. Live nurse pings for the Map (terminal 3, optional)
+
+Nurse pings expire two hours after they are created (TTL index), and the seeder does not re-create
+pings while nurses still exist. For a live demo, keep the telemetry simulator running; it adds one
+current ping per nurse every round:
+
+```bash
+source .venv/bin/activate
+python data_generation/fresh_pings.py --loop 30
+```
+
+### Docker (alternative to steps 1–6)
+
+```bash
+cp .env.docker.example .env.docker     # once; defaults avoid clashing with local databases
+docker compose --env-file .env.docker up --build --wait
+```
+
+Open http://127.0.0.1:8080 (API on http://127.0.0.1:8001). The first start creates and seeds both
+databases in their own volumes; `docker compose --env-file .env.docker down -v` removes them.
+Live pings: `docker compose --env-file .env.docker exec api python ../data_generation/fresh_pings.py --loop 30`.
+
+### Windows notes
+
+Use `Copy-Item .env.example .env`, `py -3.12 -m venv .venv`, `.\.venv\Scripts\Activate.ps1` and
+`npm.cmd ci` / `npm.cmd run dev`; every other command is the same. `scripts\setup-windows.ps1`,
+`scripts\start-api.ps1` and `scripts\start-web.ps1` wrap these steps.
+
+### Troubleshooting
+
+| Problem | Fix |
+|---|---|
+| "Could not reach the CareConnect API" | The backend is not running – start step 4. |
+| `CARECONNECT_MONGO_DB` error | Set it to `medical_db` in `.env` and run `unset CARECONNECT_MONGO_DB` in that terminal. |
+| Map shows no nurses | Pings are older than two hours – run step 6, then **Refresh now**. Nurses are seeded around Hyderabad and other South/Central Indian cities; "Use selected clinic" always lies inside that area. |
+| "Last refreshed" shows — | Switch to clinic staff in the header and click **Refresh summary**. |
+| Analytics shows an "older data" note | The database was seeded more than a month ago; the screen opens on the latest recorded dates. Reseed (step 3) for current dates. `python scripts/check-analytics.py --clinic-id 1` reports what is stored. |
+
+## Demo walkthrough
+
+1. **Browse** clinics, patients and appointments; search, filter "Accepting", page and open details.
+2. Click **Book at this clinic**, enter a copay and book. Transaction shows the balance before/after and the
+   trigger-generated audit row. Book again to see the active-visit message (partial unique index); try a
+   copay above the balance to see the insufficient-HSA message.
+3. **Audit trail** shows the new debit first; change the dates to see the opening and running balance.
+4. Switch the header to **clinic staff** of the booked clinic. Transaction and Audit trail now show an
+   access message. In **Browse → Appointments** move the visit WAITING → IN_CONSULTATION → DISCHARGED.
+5. **Analytics**: pick dates for the moving average and a date for the ranking; as staff, **Refresh summary**
+   updates the monthly discharges and the "last refreshed" time.
+6. **Map**: allow location access or use coordinates/the selected clinic; results refresh every 10 s while
+   `fresh_pings.py` moves the nurses.
+7. **Reviews**: rating distribution, top tags, average rating and one catalog document per page by specialty.
+
+## Assumptions
+
+- PostgreSQL and MongoDB run locally (or in Docker); the MongoDB database is `medical_db`.
+- Appointment statuses are `WAITING`, `IN_CONSULTATION`, `DISCHARGED` and only move forward (trigger in
+  `sql/03`). Only `DISCHARGED` appointments count as revenue and monthly discharges.
+- Workflow 2 keeps the assignment's 7-calendar-day `RANGE` window and `DENSE_RANK()`. `sql/06` is the original
+  30-day reference; the API reads `sql/08_analytics_history.sql`, the same query over all stored dates, so
+  older dates can be chosen. Days without revenue are excluded, not zero-filled. All dates are UTC.
+- Seeded data covers the 60 days before the seeder ran and does not move forward. Analytics and the Audit
+  trail therefore open on the latest recorded dates when "the last 30 days" are empty, and say so.
+- Money is exact decimal HSA account units (the schema has no currency); copays have at most two decimals.
+- GeoJSON coordinates are `[longitude, latitude]` and distances are metres. Pings expire two hours after
+  `created_at`; the Map shows each nurse's **latest** ping only, and only if it is active and within 5 km.
+- Generated clinics and nurses lie in inland Indian service areas (mainly Hyderabad, plus other cities in
+  Telangana, Andhra Pradesh, Karnataka and Maharashtra) with Faker `en_IN` names. Origins elsewhere can
+  correctly return no nurses.
+- About 20% of clinics are seeded as not accepting patients; clinic 1, the default clinic, always accepts.
+- `wallet_audit_logs` is append-only. The seeder spreads the trigger-generated audit timestamps over the
+  seeded 60 days so the date filter is meaningful; running balances are unchanged.
+- Reviews have no clinic ID, so review charts are global. `patient_id` in reviews refers to `patients.id`.
+- Sessions, CSRF tokens, booking idempotency keys and the view's last-refresh time are stored in the tables
+  of `sql/07_api_support.sql`; Part A tables, triggers and the procedure are not changed by it.
+- Demo actor switching replaces a real login and is enabled only when `CARECONNECT_DEMO_MODE=true`.
+
+## Tech choices
+
+- **React 19 + Material UI + Leaflet (Vite)** – the inherited frontend stack: MUI gives accessible
+  tables, forms and dialogs; Leaflet with OpenStreetMap shows the 5 km search without an API key. All
+  colours live in `web/src/colors.js`; the Inter font is bundled locally.
+- **FastAPI** – typed request validation (Pydantic) and generated API docs at `/api/docs`.
+- **psycopg2 and PyMongo** – the same drivers as the seeders, so the API calls the Part A SQL procedure,
+  trigger and window query and the Part A MongoDB pipelines directly instead of re-implementing them.
+- **Server-side sessions** – HttpOnly SameSite=Strict cookies, CSRF token + Origin check on every change,
+  idempotency keys for bookings, parameterised SQL and escaped MongoDB search.
+- **Faker** – realistic generated names; **Docker Compose** – a reproducible stack for a new person.
+
+## Tests
+
+```bash
+# Frontend: unit tests, production build and browser tests (browser tests use test-only API fixtures)
+cd web && npm test && npm run build && npx playwright install chromium && npm run test:e2e
+
+# API integration tests against disposable databases (the PostgreSQL name must end in _test)
+createdb careconnect_test
+cd api && pip install -r requirements-dev.txt && pytest tests -q
+```
+
+The API tests read `CARECONNECT_TEST_DATABASE_URL` and `CARECONNECT_TEST_MONGO_URI` from `.env` and cover
+booking success and rollback, audit rows, copay precision, permissions (including patient-only audit),
+CSRF, retries, concurrency, status transitions, `RANGE`/`DENSE_RANK`, latest-data coverage, refresh
+conflicts, search, paging and nearest-nurse rules. `cd web && npm run test:live` checks a running stack.
+
+## Contribution table
+
+| Team member | Roll number | Design contribution | Code / test contribution |
+|---|---|---|---|
+| `Nirupama Ranjan` | `2026201053` | `User descriptions (docs/design/users.md); Audit trail and Analytics wireframes` | `Workflow 2 RANGE window and DENSE_RANK() (sql/06) and all-dates version sql/08; analytics coverage endpoint; frontend shell, header and actor switching; Browse, Transaction, Audit trail and Analytics screens (staff access messages, latest-data defaults); frontend unit tests` |
+| `Shreya Debnath` | `2026201052` | `Visual style (colours, logo, type, empty states); Map and Reviews wireframes` | `MongoDB fixes: validators and indexes, 5 km latest-ping $geoNear (mongo/); mongo_seeder.py, Indian service areas, fresh_pings.py and bootstrap.py; Map and Reviews screens; Playwright browser tests; Docker setup; README, screenshots and demo video` |
+| `Niral Ajmera` | `2026201045` | `API design and endpoint sketch (docs/api_endpoints.md); Transaction wireframe` | `Hardened sp_execute_appointment, UTC materialized view and refresh function (sql/04–05); sql/07_api_support.sql; FastAPI server in api/ (sessions, CSRF, permissions incl. patient-only audit, booking with idempotency, status changes, MongoDB services, error codes); API integration tests` |
+| `Shaifali Vashistha` | `2026204018` | `Handover review of the inherited Part A code; Browse wireframe` | `Part A PostgreSQL fixes: IN_CONSULTATION status and forward-only status trigger, append-only wallet_audit_logs, RESTRICT foreign keys and CHECK rules (sql/01–03); postgres_seeder.py (Faker en_IN names, spread audit timestamps, non-accepting clinics); docs/handover_note.md` |
+
+## Assignment 1 evidence
+
+### Stress-test results
 
 | Store | Generated data | Verified count |
 |---|---:|---:|
@@ -91,9 +271,10 @@ The clean-install seeders were executed successfully in disposable databases on 
 | MongoDB `NursePings` | 500,000 | 500,000 before TTL expiry |
 | MongoDB `PatientReviews` | 5,000 | 5,000 |
 
-## Performance proof
+### Performance proof
 
-Raw output is committed in `performance/postgres_explain_analyzes.txt` and `performance/mongo_execution_stats.json`. Key excerpts are pasted here as required by the assignment.
+Raw output: `performance/postgres_explain_analyzes.txt`, `performance/mongo_execution_stats.json` and
+`performance/review_map_timing.json`.
 
 PostgreSQL Workflow 2 (`EXPLAIN (ANALYZE, BUFFERS)` on 50,000 appointments):
 
@@ -104,6 +285,7 @@ Index Only Scan using idx_appointments_discharged_analytics on appointments
   Index Searches: 1
 Execution Time: 24.751 ms
 ```
+
 MongoDB Workflow 3 (`explain("executionStats")` on 500,000 nurse pings):
 
 ```text
@@ -111,7 +293,6 @@ inputStage: GEO_NEAR_2DSPHERE
 indexName: location_2dsphere
 totalKeysExamined: 14009
 totalDocsExamined: 22912
-final nReturned: 1
 maxDistance: 5000
 ```
 
@@ -123,14 +304,3 @@ indexName: rating_1
 totalKeysExamined: 5000
 totalDocsExamined: 5000
 ```
-
-Tested with PostgreSQL 18.6, MongoDB 7.0.40, and Python 3.14.4.
-
-
-### AI Tool Usage Disclosure
-In the completion of this lab activity, generative AI was utilized as a learning assistant and pair-programming tool for the following tasks:
-*   Understanding and breaking down the problem statements and grading rubric.
-*   Reviewing and refining the code for accuracy, edge-case handling, and best practices.
-*   Explaining specific parts of the code that I failed to fully understand after refinement
-*   Optimizing the code for performance across the large dataset.
-*   Creating and formatting this `readme.md` file based on the finalized coding process.
