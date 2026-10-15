@@ -1,4 +1,7 @@
-db = db.getSiblingDB("careconnect");
+// Database name: CARECONNECT_MONGO_DB if set, otherwise "careconnect_a2".
+if (process.env.CARECONNECT_MONGO_DB && process.env.CARECONNECT_MONGO_DB !== 'careconnect_a2')
+  throw new Error('Set CARECONNECT_MONGO_DB=careconnect_a2.');
+db = db.getSiblingDB('careconnect_a2');
 
 // Workflow 4: Multi-Faceted Review Analytics
 const facetResults = db.PatientReviews.aggregate([
